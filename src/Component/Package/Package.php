@@ -17,7 +17,7 @@ class Package
     private ?string $errorDuring;
     private ?GitWorkingCopy $gitWorkingCopy = null;
 
-    private static function getGitWrapper(): GitWrapper
+    private function getGitWrapper(): GitWrapper
     {
         if (static::$gitWrapper === null) {
             static::$gitWrapper = new GitWrapper();
@@ -50,7 +50,7 @@ class Package
             $this->configuredRepositoryUrl = $config;
         }
 
-        $this->path = realpath(__DIR__ . '/../../../') . '/dev/' . $id;
+        $this->path = dirname(__DIR__, 3) . '/dev/' . $id;
     }
 
     public function getId(): string
@@ -122,7 +122,7 @@ class Package
         }
 
         if ($this->gitWorkingCopy === null) {
-            $this->gitWorkingCopy = static::getGitWrapper()->workingCopy($this->path);
+            $this->gitWorkingCopy = $this->getGitWrapper()->workingCopy($this->path);
         }
 
         return $this->gitWorkingCopy;
